@@ -1,0 +1,32 @@
+html, body {
+  font-size: var(--vscode-font-size);
+  font-weight: var(--vscode-font-weight);
+  font-family: var(--vscode-font-family);
+  color: var(--vscode-editor-foreground) !important;
+  background-color: var(--vscode-editor-background) !important;
+}
+
+.p-toolbar, .p-listbox, .p-breadcrumb, .p-selectbutton .p-button {
+  color:  var(--vscode-editor-foreground);
+  background: var(--vscode-editor-background);
+
+  .p-listbox-header {
+    color:  var(--vscode-editor-foreground);
+    background: var(--vscode-editor-background);
+  }
+}
+
+.p-listbox {
+  border: 0px;
+  border-radius: 0;
+}
+
+.p-toolbar {
+  .p-listbox .p-listbox-header {
+    border-bottom: 0;
+  }
+
+  .p-listbox-list-wrapper {
+    max-height: 0px;
+  }
+}

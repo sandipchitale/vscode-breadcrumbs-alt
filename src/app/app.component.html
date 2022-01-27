@@ -1,0 +1,82 @@
+<div class="wrapper">
+  <p-toolbar [style]="{ 'border-top': '1px solid var(--vscode-editorGroup-border)','border-bottom': '1px solid var(--vscode-editorGroup-border)' }">
+    <div class="p-toolbar-group-left" style="flex: 1 1 auto">
+      <ng-container *ngFor="let breadcrumbLevel of breadcrumbs">
+        <p-listbox
+          *ngIf="breadcrumbLevel.siblings.length > 0"
+          [options]="breadcrumbLevel.siblings.slice(1)"
+          styleClass="p-my-auto"
+          optionLabel="basename"
+          [readonly]="true">
+          <ng-template pTemplate="header">
+            <div style="width: 100%" class="p-d-flex p-ai-center" title="{{breadcrumbLevel.siblings[0].path}}" (click)="open(breadcrumbLevel.siblings[0], $event)">
+              <i
+                *ngIf="showBreadcrumbIcons"
+                class="p-mr-3 pi"
+                [ngClass]="{'pi-file': (breadcrumbLevel.siblings[0].fileType === 'file'), 'pi-folder': (breadcrumbLevel.siblings[0].fileType === 'folder' && !breadcrumbLevel.siblings[0].selected), 'pi-folder-open': (breadcrumbLevel.siblings[0].fileType === 'folder' && breadcrumbLevel.siblings[0].selected)}"></i>
+              <div (contextmenu)="actionMenuContextSibling = breadcrumbLevel.siblings[0];actions.show($event); $event.preventDefault();">{{breadcrumbLevel.siblings[0].basename}}</div>
+              <i *ngIf="breadcrumbLevel.siblings[0].selected"
+                class="p-ml-3 pi"
+                [ngClass]="{'pi-chevron-right': breadcrumbLevel.siblings[0].fileType === 'folder', 'pi-chevron-left': breadcrumbLevel.siblings[0].fileType !== 'folder'}"></i>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="empty">
+            <div></div>
+          </ng-template>
+          <ng-template let-sibling pTemplate="item">
+          </ng-template>
+        </p-listbox>
+      </ng-container>
+    </div>
+    <div class="p-toolbar-group-right" style="flex: 1 1 auto">
+      <div class="p-ml-auto">
+        <p-selectButton [multiple]="true" [options]="linkedTos" [(ngModel)]="selectedLinkedTos" (onChange)="linkeTosChanged($event)">
+          <ng-template let-linkedTo>
+            <i [class]="linkedTo.icon + ' ' + 'p-p-1'" [title]="linkedTo.to"></i>
+          </ng-template>
+        </p-selectButton>
+      </div>
+    </div>
+  </p-toolbar>
+  <main #main>
+    <ng-container *ngFor="let breadcrumbLevel of breadcrumbs">
+      <p-listbox
+        *ngIf="breadcrumbLevel.siblings.length > 0"
+        [options]="breadcrumbLevel.siblings.slice(1)"
+        optionLabel="basename"
+        [listStyle]="{'max-height':'calc(100vh - 112px)'}"
+        [style]="{'width': '100%', 'height': '100%'}"
+        [readonly]="true">
+        <ng-template pTemplate="header">
+          <div style="width: 100%" class="p-d-flex p-ai-center" title="{{breadcrumbLevel.siblings[0].path}}" (click)="open(breadcrumbLevel.siblings[0], $event)">
+            <i
+              *ngIf="showBreadcrumbIcons"
+              class="p-mr-3 pi"
+              [ngClass]="{'pi-file': (breadcrumbLevel.siblings[0].fileType === 'file'), 'pi-folder': (breadcrumbLevel.siblings[0].fileType === 'folder' && !breadcrumbLevel.siblings[0].selected), 'pi-folder-open': (breadcrumbLevel.siblings[0].fileType === 'folder' && breadcrumbLevel.siblings[0].selected)}"></i>
+            <div (contextmenu)="actionMenuContextSibling = breadcrumbLevel.siblings[0];actions.show($event); $event.preventDefault();">{{breadcrumbLevel.siblings[0].basename}}</div>
+            <i *ngIf="breadcrumbLevel.siblings[0].selected"
+              class="p-ml-auto pi"
+              [ngClass]="{'pi-chevron-right': breadcrumbLevel.siblings[0].fileType === 'folder', 'pi-chevron-left': breadcrumbLevel.siblings[0].fileType !== 'folder'}"></i>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="empty">
+          <div></div>
+        </ng-template>
+        <ng-template let-sibling pTemplate="item">
+          <div style="width: 100%" class="p-d-flex p-ai-center" title="{{sibling.path}}" (click)="open(sibling, $event)">
+            <i
+              *ngIf="showBreadcrumbIcons"
+              class="p-mr-3 pi"
+              [ngClass]="{'pi-file': (sibling.fileType === 'file'), 'pi-folder': (sibling.fileType === 'folder' && !sibling.selected), 'pi-folder-open': (sibling.fileType === 'folder' && sibling.selected)}"></i>
+            <div (contextmenu)="actionMenuContextSibling = sibling;actions.show($event); $event.preventDefault();">{{sibling.basename}}</div>
+            <i *ngIf="sibling.selected"
+              class="p-ml-auto pi"
+              [ngClass]="{'pi-chevron-right': sibling.fileType === 'folder', 'pi-chevron-left': sibling.fileType !== 'folder'}"></i>
+          </div>
+        </ng-template>
+      </p-listbox>
+    </ng-container>
+  </main>
+</div>
+
+<p-contextMenu #actions [model]="actionMenu" appendTo="body" (onHide)="clearActionMenuContextSibling()"></p-contextMenu>

@@ -1,0 +1,30 @@
+:host {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) 1fr;
+}
+
+.wrapper {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+
+  &.busy {
+    cursor: wait;
+  }
+
+  main {
+    display: grid;
+    grid-auto-columns: minmax(200px, auto);
+    grid-auto-flow: column;
+    grid-auto-rows: 1fr;
+    overflow-y: hidden;
+    overflow-x: scroll;
+  }
+}
+
+:host ::ng-deep .selected {
+  background-color: yellow;
+}
